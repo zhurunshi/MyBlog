@@ -4,11 +4,97 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title>博客管理系统</title>
-
+<style>
+.grad{
+    position: absolute;
+    width:100%;
+    height:100%;
+    background: -webkit-linear-gradient(90deg, #c0abde, #98e2bf);
+    background: linear-gradient(90deg, #c0abde, #98e2bf);
+}
+.logindiv{
+	position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width:25%;
+}
+.hint{
+	width: 100%;
+    height: 50px;
+    font-size: 15px;
+    font-family: 'Glyphicons Halflings';
+    color: red;
+}
+.title{
+	font-size: 70px;
+    letter-spacing: 10px;
+    margin: 0 auto;
+    text-align: center;
+    position: relative;
+    bottom: 70px;
+    font-style:italic;
+    font-family:Georgia, serif;
+    text-shadow:2px 2px 0.1px #1d0000;
+    left: 50%;
+    top: 20%;
+    transform: translate(-50%, -50%);
+    -webkit-user-select:none;
+   	-moz-user-select:none;
+   	-ms-user-select:none;
+   	user-select:none;
+}
+</style>
 </head>
 <body>
+<div class="grad">
+	<div class="title">后台管理</div>
+	<div class="logindiv">
+		<form class="bs-example bs-example-form" role="form" id="loginForm" method="post">
+			<div class="input-group input-group-lg">
+				<span class="input-group-addon"> <span class="glyphicon glyphicon-user"></span></span>
+				<input type="text" class="form-control" name="uname" id="uname" placeholder="请输入用户名">
+			</div>
+			<br>
+			<div class="input-group input-group-lg">
+				<span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
+				<input type="password" class="form-control" name="pwd" id="pwd" placeholder="请输入密码">
+			</div>
+			<br>
+			<div class="hint" id="hint"></div>
+			<div class="input-group input-group-lg" style="margin: 0 auto;width:100%;">
+				<button type="submit" id="loginButton" class="buttonlarg btn btn-primary btn-lg" style="width:100%;">登录</button>
+			</div>
+		</form>
+	</div>
+</div>
+<div th:replace="@{base/footer}::footer"></div>
+<script>
+$(function() {
+	$("#uname").focus();
+	
+	$("#loginButton").click(function(event) {
+		event.preventDefault();
+		if ($("#uname").val().trim() == "" ||
+				$("#pwd").val().trim() == "") {
+			$("#hint").text("请输入用户名和密码！");
+		} else {
+			$.ajax({
+				url: 'login/login/login',
+				method: 'POST',
+				data: $('#loginForm').serialize(),
+				success: function(res) {
+					
+					window.location.href = 'index';
+				},
+				error: function() {
+					
+				}
+			})
+		}
+	});
+});
 
-
+</script>
 </body>
-
 </html>
