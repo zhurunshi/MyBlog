@@ -3,8 +3,35 @@
 
 <!-- 公共JS资源 -->
 <div th:fragment="footer">
-	<script th:src="@{/js/jquery.js}" ></script>
-	<script th:src="@{/js/bootstrap.js}" ></script>
+	<!-- basic scripts -->
+
+	<!--[if !IE]> -->
+	<script th:src="@{/js/jquery-2.1.4.min.js}"></script>
+
+	<!-- <![endif]-->
+
+	<!--[if IE]>
+	<script th:src="@{/js/jquery-1.11.3.min.js}"></script>
+	<![endif]-->
+	<script th:src="@{/js/bootstrap.min.js}"></script>
+	<script th:src="@{/js/bootstrap-table.js}"></script>
+	<script th:src="@{/js/bootstrap-table-zh-CN.js}"></script>
+	<!-- page specific plugin scripts -->
+
+	<!--[if lte IE 8]>
+	  <script th:src="@{/js/excanvas.min.js}"></script>
+	<![endif]-->
+<!-- 	<script src="assets/js/jquery-ui.custom.min.js"></script>
+	<script src="assets/js/jquery.ui.touch-punch.min.js"></script>
+	<script src="assets/js/jquery.easypiechart.min.js"></script>
+	<script src="assets/js/jquery.sparkline.index.min.js"></script>
+	<script src="assets/js/jquery.flot.min.js"></script>
+	<script src="assets/js/jquery.flot.pie.min.js"></script>
+	<script src="assets/js/jquery.flot.resize.min.js"></script> -->
+
+	<!-- ace scripts -->
+	<script th:src="@{/js/ace-elements.min.js}"></script>
+	<script th:src="@{/js/ace.min.js}"></script>
 </div>
 
 </html>

@@ -8,8 +8,13 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping(value = "/")
 public class HomePageService {
 	
-	@RequestMapping(value = "/")
+	@RequestMapping(value = "/") 
 	public ModelAndView page() {
 		return new ModelAndView("base/homepage");
+	}
+	
+	@RequestMapping(value = "/index")
+	public ModelAndView getIndexPage() {
+		return new ModelAndView("base/index");
 	}
 }

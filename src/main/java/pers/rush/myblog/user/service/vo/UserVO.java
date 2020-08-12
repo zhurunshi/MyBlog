@@ -1,7 +1,8 @@
 package pers.rush.myblog.user.service.vo;
 
 /**
- * 用户实体
+ * 用户VO
+ * 对应前台界面元素
  * @author Rush
  *
  */
