@@ -1,4 +1,4 @@
-package pers.rush.myblog.login;
+package pers.rush.myblog.login.service.impl;
 
 import javax.servlet.http.HttpServletRequest;
 
