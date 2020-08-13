@@ -9,12 +9,12 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import pers.rush.myblog.user.dao.entity.UserEntity;
 
 /**
- * 登录拦截器
+ * 判断session是否为空
  * 适用于：非ajax形式，可以登录跳转
  * @author Rush
  *
  */
-public class LoginInterceptor implements HandlerInterceptor {
+public class SessionInterceptor implements HandlerInterceptor {
 	
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)

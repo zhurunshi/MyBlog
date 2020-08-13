@@ -1,49 +1,50 @@
 $(function(){
+	$('#searchButton').click(function(e) {
+		initTable();
+	});
+});
+
+function initTable() {
 	$('#confTable').bootstrapTable({
       url: '/conf/conf/find',
-      method: 'get',
+      method: 'post',
       striped: true,
       toolbar: "#toolbar",
       sidePagination: "true",
       striped: true, // 是否显示行间隔色
-      //search : "true",
-      uniqueId: "ID",
       pageSize: "5",
       pagination: true, // 是否分页
       sortable: true, // 是否启用排序
       search:true,
       showColumns: true,
       showRefresh: true,
+	  sidePagination: "client",
       columns: [
         {
-          //field: 'Number',//可不加
-          title: '序号',//标题  可不加
-          align: "center",
-          width: 40,
-          formatter: function (value, row, index) {
-            return index+1;
-          }
+          field: 'checkBox',//可不加
+		  checkbox: true,
+          align: "center"
         },
         {
-          field: 'id',
-          title: 'id'
+          field: 'confKey',
+          title: '参数代码'
         },
         {
-          field: 'firstName',
-          title: 'firstName'
+          field: 'confName',
+          title: '参数名称'
         },
         {
-          field: 'lastName',
-          title: 'lastName'
+          field: 'type',
+          title: '参数类型'
         },
-        {
-          field: 'price',
-          title: '操作',
-          width: 120,
-          align: 'center',
-          valign: 'middle',
-          formatter: actionFormatter,
+		{
+          field: 'value',
+          title: '参数值'
         },
+		{
+          field: 'dtal',
+          title: '备注'
+        }
       ]
     });
-});
+}

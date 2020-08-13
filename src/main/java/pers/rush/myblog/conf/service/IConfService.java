@@ -1,8 +1,9 @@
 package pers.rush.myblog.conf.service;
 
+import java.util.List;
+
 import org.springframework.web.servlet.ModelAndView;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 import pers.rush.myblog.conf.service.vo.ConfVO;
@@ -20,5 +21,5 @@ public interface IConfService {
 	 */
 	public ModelAndView page();
 	
-	public IPage<ConfVO> findByWhere(Page<ConfVO> svp, ConfVO sv);
+	public List<ConfVO> findByWhere(ConfVO sv);
 }

@@ -34,13 +34,12 @@ public class ConfService implements IConfService {
 	
 	@Override
 	@RequestMapping(value = "/find")
-	public IPage<ConfVO> findByWhere(Page<ConfVO> svp, ConfVO sv) {
+	public List<ConfVO> findByWhere(ConfVO sv) {
 		// VO转化到Entity
 		ConfEntity se = mapper.map(sv, ConfEntity.class);
 		//分页查询
-		List<ConfEntity> sel = confLogic.findByWhere(svp, se);
+		List<ConfEntity> sel = confLogic.findByWhere(se);
 		// Entity转化到VO
-		svp.setRecords(DozerWarpper.toVOList(sel, ConfVO.class));
-		return svp;
+		return DozerWarpper.toVOList(sel, ConfVO.class);
 	}
 }

@@ -8,7 +8,21 @@
 	
 		<meta name="description" content="参数管理" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-	
+	<style>
+	.btn {
+		margin-left:0;
+		color: #FFF;
+    	border-color: #ccc;
+		text-shadow:0 -1px 0 rgba(0,0,0,0);
+		border-width:1px;
+	}
+	.btn-group>.btn {
+		border-width:1px!important;
+		margin:0!important;
+		background-color: #fff!important;
+		color: #333!important;
+	}
+	</style>
 	</head>
 
 	<body class="no-skin">
@@ -180,7 +194,7 @@
 							</li>
 							
 							<li class="active">
-								<a href="/conf/conf/ConfigIndex">
+								<a href="/conf/conf/ConfIndex">
 									<i class="menu-icon fa fa-caret-right"></i>
 									参数管理
 								</a>
@@ -337,7 +351,7 @@
 										<div class="panel-heading">查询条件</div>
 										<div class="panel-body">
 											<form id="formSearch" class="form-horizontal">
-												<div class="form-group" style="margin-top:15px">
+												<div class="form-group">
 													<label class="control-label col-sm-1" for="confKey">参数代码</label>
 													<div class="col-sm-3">
 														<input type="text" class="form-control" id="confKey">
@@ -346,8 +360,8 @@
 													<div class="col-sm-3">
 														<input type="text" class="form-control" id="confName">
 													</div>
-													<div class="col-sm-4" style="text-align:left;">
-														<button type="button" style="margin-left:50px" id="searchButton" class="btn btn-primary">查询</button>
+													<div class="col-sm-4" style="text-align:right;">
+														<button type="button" id="searchButton" class="btn btn-primary">查询</button>
 													</div>
 												</div>
 											</form>

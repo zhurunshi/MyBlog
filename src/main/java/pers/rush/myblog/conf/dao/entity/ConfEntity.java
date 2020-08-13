@@ -14,7 +14,7 @@ public class ConfEntity {
 	 */
 	private String type;
 	/**
-	 * 值
+	 * 参数值
 	 */
 	private String value;
 	/**
