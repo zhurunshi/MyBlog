@@ -1,11 +1,17 @@
 package pers.rush.myblog.common.util;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
+
+import org.springframework.stereotype.Component;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTCreator;
+import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.Claim;
+import com.auth0.jwt.interfaces.DecodedJWT;
 
 import pers.rush.myblog.common.exception.BusinessException;
 
@@ -14,8 +20,12 @@ import pers.rush.myblog.common.exception.BusinessException;
  * @author RUSH
  *
  */
+@Component
 public class JWTUtils {
 	private static final String SECRET = "RUSH";
+	
+	private static final String ISSUER = "myblog";
+	private static long EXPIRE_TIME = 15 * 60 * 1000;
 	
 	/**
 	 * 生成token
@@ -23,15 +33,15 @@ public class JWTUtils {
 	 * @param expireDatePoint
 	 * @return
 	 */
-	public static String genToken(Map<String, String> claims, Date expireDatePoint) {
+	public static String genToken(Map<String, String> claims) {
 		try {
 			// 使用HMAC256进行加密
 			Algorithm algorithm = Algorithm.HMAC256(SECRET);
 			
 			// 创建jwt
 			JWTCreator.Builder builder = JWT.create()
-					.withIssuer("faxingren") // 发行人
-					.withExpiresAt(expireDatePoint); // 过期时间点
+					.withIssuer(ISSUER) // 发行者
+					.withExpiresAt(new Date(System.currentTimeMillis() + EXPIRE_TIME)); // 过期时间点
 			
 			// 传入参数
 			for (Map.Entry<String, String> entry : claims.entrySet()) {
@@ -43,5 +53,33 @@ public class JWTUtils {
 		} catch (Exception e) {
             throw new BusinessException("0002", "生成token时出现异常，原因为" + e.getMessage());
         }
+	}
+	
+	/**
+	 * 解析token
+	 * @param token
+	 * @return
+	 */
+	public static Map<String, String> verifyToken(String token) {
+		Algorithm algorithm = null;
+		try {
+			// 使用HMAC256加密
+			algorithm = Algorithm.HMAC256(SECRET);
+		} catch (Exception e) {
+			throw new BusinessException("0003", "解析token时出现异常，原因为：" + e.getMessage());
+		}
+		// 解析
+		JWTVerifier verifier = JWT.require(algorithm).withIssuer(ISSUER).build();
+		DecodedJWT jwt = verifier.verify(token);
+		Map<String, Claim> map = jwt.getClaims();
+		Map<String, String> resultMap = new HashMap<>();
+		for (Map.Entry<String, Claim> entry : map.entrySet()) {
+			if ("exp".equals(entry.getKey())) {
+				resultMap.put(entry.getKey(), entry.getValue().asLong().toString());
+			} else {
+				resultMap.put(entry.getKey(), entry.getValue().asString());
+			}
+		}
+		return resultMap;
 	}
 }

@@ -84,8 +84,11 @@ $(function() {
 				method: 'POST',
 				data: $('#loginForm').serialize(),
 				success: function(res) {
-					
-					window.location.href = 'index';
+					if (res.success) {
+						window.location.href = 'index';
+					} else {
+						alert("错误码：" + res.code + "，错误信息：" + res.message);
+					}
 				},
 				error: function() {
 					

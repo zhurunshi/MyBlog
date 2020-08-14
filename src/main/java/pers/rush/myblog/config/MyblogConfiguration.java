@@ -28,6 +28,12 @@ public class MyblogConfiguration implements WebMvcConfigurer {
 			.excludePathPatterns("/fonts/**");
 		// token拦截器
 		registry.addInterceptor(new TokenInterceptor())
-			.addPathPatterns("/**");
+			.addPathPatterns("/**")
+			.excludePathPatterns("/login/login/login")
+			.excludePathPatterns("/")
+			.excludePathPatterns("/css/**")
+			.excludePathPatterns("/js/**")
+			.excludePathPatterns("/images/**")
+			.excludePathPatterns("/fonts/**");
 	}
 }

@@ -11,14 +11,14 @@ import org.springframework.stereotype.Component;
 import com.github.dozermapper.core.Mapper;
 
 @Component
-public class DozerWarpper {
+public class DozerWrapper {
 	
 	@Autowired
 	private Mapper mapper;
 	
 	private static Mapper staMapper;
 	
-	private DozerWarpper() {}
+	private DozerWrapper() {}
 	
 	@PostConstruct
 	public void init() {

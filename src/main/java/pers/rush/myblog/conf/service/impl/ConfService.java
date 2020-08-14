@@ -11,7 +11,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.dozermapper.core.Mapper;
 
-import pers.rush.myblog.common.util.DozerWarpper;
+import pers.rush.myblog.common.util.DozerWrapper;
 import pers.rush.myblog.conf.dao.entity.ConfEntity;
 import pers.rush.myblog.conf.logic.ConfLogic;
 import pers.rush.myblog.conf.service.IConfService;
@@ -40,6 +40,6 @@ public class ConfService implements IConfService {
 		//分页查询
 		List<ConfEntity> sel = confLogic.findByWhere(se);
 		// Entity转化到VO
-		return DozerWarpper.toVOList(sel, ConfVO.class);
+		return DozerWrapper.toVOList(sel, ConfVO.class);
 	}
 }
