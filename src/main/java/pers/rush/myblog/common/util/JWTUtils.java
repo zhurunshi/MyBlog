@@ -13,6 +13,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
+import pers.rush.myblog.common.ErrConst;
 import pers.rush.myblog.common.exception.BusinessException;
 
 /**
@@ -51,7 +52,7 @@ public class JWTUtils {
 			// 签名加密
 			return builder.sign(algorithm);
 		} catch (Exception e) {
-            throw new BusinessException("0002", "生成token时出现异常，原因为" + e.getMessage());
+            throw new BusinessException(ErrConst.GEN_TOKEN_ERROR, "生成token时出现异常，原因为" + e.getMessage());
         }
 	}
 	
@@ -66,7 +67,7 @@ public class JWTUtils {
 			// 使用HMAC256加密
 			algorithm = Algorithm.HMAC256(SECRET);
 		} catch (Exception e) {
-			throw new BusinessException("0003", "解析token时出现异常，原因为：" + e.getMessage());
+			throw new BusinessException(ErrConst.ANY_TOKEN_ERROR, "解析token时出现异常，原因为：" + e.getMessage());
 		}
 		// 解析
 		JWTVerifier verifier = JWT.require(algorithm).withIssuer(ISSUER).build();

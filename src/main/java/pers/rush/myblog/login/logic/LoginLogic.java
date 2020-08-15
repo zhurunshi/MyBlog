@@ -2,6 +2,7 @@ package pers.rush.myblog.login.logic;
 
 import org.springframework.stereotype.Component;
 
+import pers.rush.myblog.common.ErrConst;
 import pers.rush.myblog.common.exception.BusinessException;
 import pers.rush.myblog.user.dao.entity.UserEntity;
 import pers.rush.myblog.user.service.vo.UserVO;
@@ -39,7 +40,7 @@ public class LoginLogic {
 			userEntity.setRealName("朱润石");
 		} else {
 			String msg = "用户名或密码错误。";
-			throw new BusinessException("0002", msg);
+			throw new BusinessException(ErrConst.LOGIN_FAILED, msg);
 		}
 		return userEntity;
 	}

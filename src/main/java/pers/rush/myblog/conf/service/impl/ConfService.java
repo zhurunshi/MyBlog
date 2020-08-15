@@ -1,16 +1,17 @@
 package pers.rush.myblog.conf.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.dozermapper.core.Mapper;
 
+import pers.rush.myblog.common.pojo.R;
 import pers.rush.myblog.common.util.DozerWrapper;
 import pers.rush.myblog.conf.dao.entity.ConfEntity;
 import pers.rush.myblog.conf.logic.ConfLogic;
@@ -34,12 +35,12 @@ public class ConfService implements IConfService {
 	
 	@Override
 	@RequestMapping(value = "/find")
-	public List<ConfVO> findByWhere(ConfVO sv) {
+	public List<ConfVO> findByWhere(ConfVO vo) {
 		// VO转化到Entity
-		ConfEntity se = mapper.map(sv, ConfEntity.class);
+		ConfEntity entity = mapper.map(vo, ConfEntity.class);
 		//分页查询
-		List<ConfEntity> sel = confLogic.findByWhere(se);
+		List<ConfEntity> entitys = confLogic.findByWhere(entity);
 		// Entity转化到VO
-		return DozerWrapper.toVOList(sel, ConfVO.class);
+		return DozerWrapper.toVOList(entitys, ConfVO.class);
 	}
 }

@@ -5,7 +5,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import pers.rush.myblog.interceptor.SessionInterceptor;
-import pers.rush.myblog.interceptor.TokenInterceptor;
+import pers.rush.myblog.interceptor.LoginInterceptor;
 
 /**
  * springboot配置
@@ -17,17 +17,8 @@ public class MyblogConfiguration implements WebMvcConfigurer {
 	
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
-		// session拦截器
-		registry.addInterceptor(new SessionInterceptor())
-			.addPathPatterns("/**")
-			.excludePathPatterns("/login/login/login")
-			.excludePathPatterns("/")
-			.excludePathPatterns("/css/**")
-			.excludePathPatterns("/js/**")
-			.excludePathPatterns("/images/**")
-			.excludePathPatterns("/fonts/**");
 		// token拦截器
-		registry.addInterceptor(new TokenInterceptor())
+		registry.addInterceptor(new LoginInterceptor())
 			.addPathPatterns("/**")
 			.excludePathPatterns("/login/login/login")
 			.excludePathPatterns("/")

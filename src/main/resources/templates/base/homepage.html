@@ -85,6 +85,7 @@ $(function() {
 				data: $('#loginForm').serialize(),
 				success: function(res) {
 					if (res.success) {
+						$.cookie("token", res.data.token);
 						window.location.href = 'index';
 					} else {
 						alert("错误码：" + res.code + "，错误信息：" + res.message);

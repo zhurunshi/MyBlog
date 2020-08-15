@@ -7,7 +7,7 @@ package pers.rush.myblog.common.pojo;
  */
 public enum ResultEnum {
 	SUCCESS(true, "0000", "成功"),
-	ERROR(false, "", "未知错误");
+	ERROR(false, "4000", "错误");
 	
 	 
 	// 响应是否成功
