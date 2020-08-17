@@ -45,6 +45,7 @@ public class LoginService implements ILoginService {
 		// 将token放到cookie中
 		Cookie cookie = new Cookie("token", token);
 		cookie.setMaxAge(60*30); // 30mins
+		cookie.setPath("/");
 		response.addCookie(cookie);
 		return R.ok().data("token", token);
 	}
@@ -55,8 +56,9 @@ public class LoginService implements ILoginService {
 		// 删除session中的用户
 		request.getSession().removeAttribute("user");
 		// 删除cookie
-		Cookie cookie = new Cookie("token", null);
+		Cookie cookie = new Cookie("token" , null);
 		cookie.setMaxAge(0);
+		cookie.setPath("/");
 		response.addCookie(cookie);
 		return new ModelAndView("redirect:/");
 	}

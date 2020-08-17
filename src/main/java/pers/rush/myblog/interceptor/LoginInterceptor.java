@@ -1,5 +1,6 @@
 package pers.rush.myblog.interceptor;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.Cookie;
@@ -52,6 +53,15 @@ public class LoginInterceptor implements HandlerInterceptor {
 						throw new BusinessException(ErrConst.TOKEN_ERROR, "Token信息无效，已过期。");
 					}
 					ifValidate = true;
+					// 更新token时间
+					Map<String, String> claims = new HashMap<>();
+					claims.put("userId", userEntity.getUserId());
+					String newToken = JWTUtils.genToken(claims);
+					// 将token放到cookie中
+					Cookie newCookie = new Cookie("token", newToken);
+					newCookie.setMaxAge(60*30); // 30mins
+					newCookie.setPath("/");
+					response.addCookie(newCookie);
 					break;
 				}
 			}
