@@ -1,4 +1,4 @@
-package pers.rush.myblog.common;
+package pers.rush.myblog.common.data;
 
 /**
  * 常量类

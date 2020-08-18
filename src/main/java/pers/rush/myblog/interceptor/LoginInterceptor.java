@@ -10,7 +10,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.web.servlet.HandlerInterceptor;
 
-import pers.rush.myblog.common.ErrConst;
+import pers.rush.myblog.common.data.ErrConst;
 import pers.rush.myblog.common.exception.BusinessException;
 import pers.rush.myblog.common.util.JWTUtils;
 import pers.rush.myblog.user.dao.entity.UserEntity;
@@ -44,13 +44,6 @@ public class LoginInterceptor implements HandlerInterceptor {
 					String userId = map.get("userId");
 					if (userId == null || !userId.equals(userEntity.getUserId())) {
 						throw new BusinessException(ErrConst.TOKEN_ERROR, "Token信息无效。");
-					}
-					// 获得token过期时间
-					String expireTimeStr = map.get("exp");
-					if (System.currentTimeMillis() / 1000 >=
-							Long.valueOf(expireTimeStr)) {
-						// 判断过期
-						throw new BusinessException(ErrConst.TOKEN_ERROR, "Token信息无效，已过期。");
 					}
 					ifValidate = true;
 					// 更新token时间

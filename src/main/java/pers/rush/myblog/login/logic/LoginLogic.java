@@ -2,7 +2,7 @@ package pers.rush.myblog.login.logic;
 
 import org.springframework.stereotype.Component;
 
-import pers.rush.myblog.common.ErrConst;
+import pers.rush.myblog.common.data.ErrConst;
 import pers.rush.myblog.common.exception.BusinessException;
 import pers.rush.myblog.user.dao.entity.UserEntity;
 import pers.rush.myblog.user.service.vo.UserVO;

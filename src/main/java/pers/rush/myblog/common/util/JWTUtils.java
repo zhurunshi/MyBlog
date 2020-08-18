@@ -10,10 +10,11 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTCreator;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
-import pers.rush.myblog.common.ErrConst;
+import pers.rush.myblog.common.data.ErrConst;
 import pers.rush.myblog.common.exception.BusinessException;
 
 /**
@@ -26,7 +27,7 @@ public class JWTUtils {
 	private static final String SECRET = "RUSH";
 	
 	private static final String ISSUER = "myblog";
-	private static long EXPIRE_TIME = 15 * 60 * 1000;
+	private static long EXPIRE_TIME = 30 * 60 * 1000; // 30分钟
 	
 	/**
 	 * 生成token
@@ -38,17 +39,16 @@ public class JWTUtils {
 		try {
 			// 使用HMAC256进行加密
 			Algorithm algorithm = Algorithm.HMAC256(SECRET);
-			
+			long nowTime = System.currentTimeMillis();
 			// 创建jwt
 			JWTCreator.Builder builder = JWT.create()
 					.withIssuer(ISSUER) // 发行者
-					.withExpiresAt(new Date(System.currentTimeMillis() + EXPIRE_TIME)); // 过期时间点
-			
+					.withIssuedAt(new Date(nowTime)) // 当前时间
+					.withExpiresAt(new Date(nowTime + EXPIRE_TIME)); // 过期时间
 			// 传入参数
 			for (Map.Entry<String, String> entry : claims.entrySet()) {
 				builder.withClaim(entry.getKey(), entry.getValue());
 			}
-			
 			// 签名加密
 			return builder.sign(algorithm);
 		} catch (Exception e) {
@@ -66,7 +66,10 @@ public class JWTUtils {
 		try {
 			// 使用HMAC256加密
 			algorithm = Algorithm.HMAC256(SECRET);
-		} catch (Exception e) {
+		} catch (JWTVerificationException e) {
+			throw new BusinessException(ErrConst.TOKEN_ERROR, "Token信息无效，已过期。");
+		}
+		catch (Exception e) {
 			throw new BusinessException(ErrConst.ANY_TOKEN_ERROR, "解析token时出现异常，原因为：" + e.getMessage());
 		}
 		// 解析
