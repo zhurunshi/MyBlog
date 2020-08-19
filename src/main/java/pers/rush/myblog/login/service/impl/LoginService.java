@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import pers.rush.myblog.common.data.Const;
 import pers.rush.myblog.common.pojo.R;
 import pers.rush.myblog.common.util.JWTUtils;
 import pers.rush.myblog.login.logic.LoginLogic;
@@ -36,18 +37,27 @@ public class LoginService implements ILoginService {
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public R login(UserVO userVO, HttpServletRequest request, HttpServletResponse response) {
 		UserEntity userEntity = loginLogic.auth(userVO);
-		// 验证通过后，将用户放到session中
+		// 1.验证通过后，将用户放到session中
 		request.getSession().setAttribute("user", userEntity);
-		// 根据用户信息生成token
+		// 2.根据用户信息生成token
 		Map<String, String> claims = new HashMap<>();
 		claims.put("userId", userEntity.getUserId());
-		String token = JWTUtils.genToken(claims);
-		// 将token放到cookie中
-		Cookie cookie = new Cookie("token", token);
-		cookie.setMaxAge(60*30); // 30mins
-		cookie.setPath("/");
-		response.addCookie(cookie);
-		return R.ok().data("token", token);
+		// 可以使用该用户的密码作为秘钥
+		String token = JWTUtils.genToken(claims, Const.SECRET, Const.EXPIRE_1_MIN);
+		// 3.将token放到cookie中
+		Cookie tokenCookie = new Cookie("token", token);
+		tokenCookie.setMaxAge(60*60);
+		tokenCookie.setPath("/");
+		response.addCookie(tokenCookie);
+		// 4.根据token生成refresh-token
+		String refreshToken = JWTUtils.genToken(claims, token, 2 * Const.EXPIRE_1_MIN);
+		// 5.将refresh-token放到cookie中
+		Cookie refreshCookie = new Cookie("refresh_token", refreshToken);
+		refreshCookie.setMaxAge(60*60);
+		refreshCookie.setPath("/");
+		response.addCookie(refreshCookie);
+		return R.ok().data("token", token)
+					.data("refresh_token", refreshToken);
 	}
 
 	@Override
@@ -56,10 +66,14 @@ public class LoginService implements ILoginService {
 		// 删除session中的用户
 		request.getSession().removeAttribute("user");
 		// 删除cookie
-		Cookie cookie = new Cookie("token" , null);
-		cookie.setMaxAge(0);
-		cookie.setPath("/");
-		response.addCookie(cookie);
+		Cookie tokenCookie = new Cookie("token" , null);
+		tokenCookie.setMaxAge(0);
+		tokenCookie.setPath("/");
+		response.addCookie(tokenCookie);
+		Cookie refreshCookie = new Cookie("refresh_token" , null);
+		refreshCookie.setMaxAge(0);
+		refreshCookie.setPath("/");
+		response.addCookie(refreshCookie);
 		return new ModelAndView("redirect:/");
 	}
 

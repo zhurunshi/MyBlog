@@ -11,9 +11,11 @@ import com.auth0.jwt.JWTCreator;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
+import pers.rush.myblog.common.data.Const;
 import pers.rush.myblog.common.data.ErrConst;
 import pers.rush.myblog.common.exception.BusinessException;
 
@@ -24,10 +26,7 @@ import pers.rush.myblog.common.exception.BusinessException;
  */
 @Component
 public class JWTUtils {
-	private static final String SECRET = "RUSH";
-	
 	private static final String ISSUER = "myblog";
-	private static long EXPIRE_TIME = 30 * 60 * 1000; // 30分钟
 	
 	/**
 	 * 生成token
@@ -35,16 +34,16 @@ public class JWTUtils {
 	 * @param expireDatePoint
 	 * @return
 	 */
-	public static String genToken(Map<String, String> claims) {
+	public static String genToken(Map<String, String> claims, String secret, long during) {
 		try {
 			// 使用HMAC256进行加密
-			Algorithm algorithm = Algorithm.HMAC256(SECRET);
+			Algorithm algorithm = Algorithm.HMAC256(secret);
 			long nowTime = System.currentTimeMillis();
 			// 创建jwt
 			JWTCreator.Builder builder = JWT.create()
 					.withIssuer(ISSUER) // 发行者
 					.withIssuedAt(new Date(nowTime)) // 当前时间
-					.withExpiresAt(new Date(nowTime + EXPIRE_TIME)); // 过期时间
+					.withExpiresAt(new Date(nowTime + during)); // 过期时间
 			// 传入参数
 			for (Map.Entry<String, String> entry : claims.entrySet()) {
 				builder.withClaim(entry.getKey(), entry.getValue());
@@ -61,20 +60,24 @@ public class JWTUtils {
 	 * @param token
 	 * @return
 	 */
-	public static Map<String, String> verifyToken(String token) {
+	public static Map<String, String> verifyToken(String token, String secret) {
 		Algorithm algorithm = null;
 		try {
 			// 使用HMAC256加密
-			algorithm = Algorithm.HMAC256(SECRET);
-		} catch (JWTVerificationException e) {
-			throw new BusinessException(ErrConst.TOKEN_ERROR, "Token信息无效，已过期。");
-		}
-		catch (Exception e) {
+			algorithm = Algorithm.HMAC256(secret);
+		} catch (Exception e) {
 			throw new BusinessException(ErrConst.ANY_TOKEN_ERROR, "解析token时出现异常，原因为：" + e.getMessage());
 		}
 		// 解析
 		JWTVerifier verifier = JWT.require(algorithm).withIssuer(ISSUER).build();
-		DecodedJWT jwt = verifier.verify(token);
+		DecodedJWT jwt = null;
+		try {
+			jwt = verifier.verify(token);
+		} catch (TokenExpiredException e) { // token过期异常
+			throw e;
+		} catch (Exception e) {
+			throw new BusinessException(ErrConst.ANY_TOKEN_ERROR, "解析token时出现异常，原因为：" + e.getMessage());
+		}
 		Map<String, Claim> map = jwt.getClaims();
 		Map<String, String> resultMap = new HashMap<>();
 		for (Map.Entry<String, Claim> entry : map.entrySet()) {
