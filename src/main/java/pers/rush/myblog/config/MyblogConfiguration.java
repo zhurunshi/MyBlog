@@ -2,9 +2,9 @@ package pers.rush.myblog.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import pers.rush.myblog.interceptor.SessionInterceptor;
 import pers.rush.myblog.interceptor.LoginInterceptor;
 
 /**
@@ -20,7 +20,9 @@ public class MyblogConfiguration implements WebMvcConfigurer {
 		// token拦截器
 		registry.addInterceptor(new LoginInterceptor())
 			.addPathPatterns("/**")
+			// api接口
 			.excludePathPatterns("/login/login/login")
+			.excludePathPatterns("/login/login/logout")
 			.excludePathPatterns("/")
 			.excludePathPatterns("/css/**")
 			.excludePathPatterns("/js/**")

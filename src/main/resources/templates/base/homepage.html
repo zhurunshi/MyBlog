@@ -85,7 +85,7 @@ $(function() {
 				data: $('#loginForm').serialize(),
 				success: function(res) {
 					if (res.success) {
-						alert(res);
+						console.log(res);
 						window.location.href = 'index';
 					} else {
 						alert("错误码：" + res.code + "，错误信息：" + res.message);
